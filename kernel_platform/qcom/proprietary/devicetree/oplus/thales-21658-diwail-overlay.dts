@@ -1,0 +1,463 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/oplus/hw-id.h>
+#include "../qcom/diwali-idp-nopmi-overlay.dts"
+#include "diwail_overlay_common.dtsi"
+#include "sensor/wuyi-sensor-21125.dtsi"
+#include "thales_overlay_common.dtsi"
+#include "oplus_chg/oplus-chg-21125.dtsi"
+#include "oplus_uff/oplus_uff_21125.dtsi"
+#include "nfc/wuyi-nfc-sn110t.dtsi"
+#include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
+#include <dt-bindings/clock/qcom,rpmh.h>
+/ {
+    model = "Qualcomm Technologies, Inc. Diwali IDP NOPMI,wuyi";
+
+    oplus,project-id = <21658>;
+    oplus,hw-id = <OPLUS_EVT1 OPLUS_DVT1 OPLUS_PVT1>;
+};
+
+&apps_rsc {
+	rpmh-regulator-ldoc6 {
+		compatible = "qcom,rpmh-vrm-regulator";
+		qcom,resource-name = "ldoc6";
+		qcom,regulator-type = "pmic5-ldo";
+		qcom,supported-modes =
+			<RPMH_REGULATOR_MODE_LPM
+			 RPMH_REGULATOR_MODE_HPM>;
+		qcom,mode-threshold-currents = <0 10000>;
+		L6C: pm8350c_l6: regulator-pm8350c-l6 {
+			regulator-name = "pm8350c_l6";
+			qcom,set = <RPMH_REGULATOR_SET_ALL>;
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			qcom,init-voltage = <1800000>;
+			qcom,init-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+	};
+};
+
+/*#ifdef OPLUS_FEATURE_TP_BASIC*/
+&pm7325_gpios {
+	key_vol_down {
+		key_vol_down_default: key_vol_down_default {
+			pins = "gpio6";
+			function = "normal";
+			input-enable;
+			bias-pull-up;
+			power-source = <1>;
+		};
+	};
+};
+
+&pmk8350 {
+	pon_hlos@1300 {
+		resin {
+		    qcom,pon-type = <PON_POWER_ON_TYPE_RESIN>;
+		    linux,code = <KEY_VOLUMEUP>;
+		};
+	};
+};
+/*#endif OPLUS_FEATURE_TP_BASIC*/
+
+&tlmm {
+	cd_pin_pulldown: cd_pin_pulldown {
+		mux {
+			pins = "gpio149";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio149";
+			drive-strength = <2>;
+			bias-pull-down;
+			input-enable;
+		};
+	};
+
+	explorer_int0: explorer_int0 {
+		mux {
+			pins = "gpio137";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio137";
+			bias-pull-down;
+			drive-strength = <2>;
+			input-enable;
+		};
+	};
+
+	explorer_int1: explorer_int1 {
+		mux {
+			pins = "gpio138";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio138";
+			bias-pull-down;
+			drive-strength = <2>;
+			input-enable;
+		};
+	};
+
+	explorer_int2: explorer_int2 {
+		mux {
+			pins = "gpio140";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio140";
+			bias-pull-down;
+			drive-strength = <2>;
+			input-enable;
+		};
+	};
+
+	pmic_pon_1: pmic_pon_1 {
+		mux {
+			pins = "gpio60";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio60";
+			bias-pull-down;
+			drive-strength = <2>;
+			output-low;
+		};
+	};
+
+	pmic_resin_n: pmic_resin_n {
+		mux {
+			pins = "gpio152";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio152";
+			bias-pull-down;
+			drive-strength = <2>;
+			output-low;
+		};
+	};
+
+	sdc2_on: sdc2_on {
+		clk {
+			pins = "sdc2_clk";
+			bias-disable;
+			drive-strength = <8>;
+		};
+		cmd {
+			pins = "sdc2_cmd";
+			bias-pull-up;
+			drive-strength = <6>;
+		};
+		data {
+			pins = "sdc2_data";
+			bias-pull-up;
+			drive-strength = <6>;
+		};
+	};
+
+	sdc2_off: sdc2_off {
+		clk {
+			pins = "sdc2_clk";
+			bias-disable;
+			drive-strength = <2>;
+		};
+		cmd {
+			pins = "sdc2_cmd";
+			bias-pull-up;
+			drive-strength = <2>;
+		};
+		data {
+			pins = "sdc2_data";
+			bias-pull-up;
+			drive-strength = <2>;
+		};
+	};
+	/*#ifdef OPLUS_FEATURE_TP_BASIC*/
+	pmx_ts_int_active_oppo {
+		ts_int_active: ts_int_active {
+			mux {
+				pins = "gpio51";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio51";
+				drive-strength = <8>;
+				bias-disable;
+				input-enable;
+			};
+		};
+	};
+
+	pmx_ts_int_suspend_oppo {
+		ts_int_suspend1: ts_int_suspend1 {
+			mux {
+				pins = "gpio51";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio51";
+				drive-strength = <8>;
+				//bias-pull-down;
+				bias-pull-up;
+				input-enable;
+			};
+		};
+	};
+
+	pmx_ts_reset_active_oppo {
+		ts_reset_active: ts_reset_active {
+			mux {
+				pins = "gpio11";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio11";
+				drive-strength = <8>;
+				output-low;
+				bias-disable;
+			};
+		};
+	};
+
+	pmx_ts_reset_suspend_oppo {
+		ts_reset_suspend1: ts_reset_suspend1 {
+			mux {
+				pins = "gpio11";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio11";
+				drive-strength = <2>;
+				bias-pull-down;
+			};
+		};
+	};
+
+	aboard_pin {
+		hw_pins_default:hw_pins_default {
+		};
+
+		aboard_pin_gpio0_sleep:aboard_pin_gpio0_sleep {
+			mux {
+				pins = "gpio96";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio96";
+				bias-pull-down;
+				input-enable;
+			};
+		};
+
+		aboard_pin_gpio0_active:aboard_pin_gpio0_active {
+			mux {
+				pins = "gpio96";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio96";
+				bias-pull-up;
+				input-enable;
+			};
+		};
+
+		aboard_pin_gpio0_idle:aboard_pin_gpio0_idle {
+			mux {
+				pins = "gpio96";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio96";
+				bias-disable;
+				input-enable;
+			};
+		};
+	};
+	/*#endif OPLUS_FEATURE_TP_BASIC*/
+};
+
+&soc {
+	devinfo {
+		status = "disabled";
+	};
+
+	devinfo_oplus {
+		compatible = "oplus-devinfo";
+
+		pinctrl-names = "default", "sleep", "active", "idle";
+		pinctrl-0 = <&hw_pins_default>;
+		pinctrl-1 = <&aboard_pin_gpio0_sleep>;
+		pinctrl-2 = <&aboard_pin_gpio0_active>;
+		pinctrl-3 = <&aboard_pin_gpio0_idle>;
+
+		main-sub {
+			compatible = "hw-match, main-sub";
+			use_tristate_gpio;
+			aboard-gpio0 = <&tlmm 96 0>;
+			aboard-patterns = <0>;	/*0[high-resistance] 1[pull-down] 2[pull-up]*/
+			/*main board*/
+			match-projects = <21658>;
+		};
+	};
+};
+
+&sdhc_2 {
+	cd-debounce-delay-ms = <1>;
+	cd-gpios = <&tlmm 149 GPIO_ACTIVE_HIGH>;
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&sdc2_on &cd_pin_pulldown>;
+	pinctrl-1 = <&sdc2_off>;
+	filter-enable;
+	no-sd;
+	no-mmc;
+	qcom,vdd-io-voltage-level = <1800000 1800000>;
+	qcom,vdd-voltage-level = <3300000 3300000>;
+	status = "ok";
+};
+
+&soc {
+	preisp: zeku,explorer@0 {
+		compatible = "zeku,explorer";
+		interrupt-parent = <&tlmm>;
+		bsp_irq_gpio = <&tlmm 137 0>;
+		bsp_int1_gpio = <&tlmm 138 0>;
+		bsp_int2_gpio = <&tlmm 140 0>;
+		pmic_pon_gpio = <&tlmm 60 0>;
+		pmic_reset_gpio = <&tlmm 152 0>;
+		ignore-dsleep;
+		pinctrl-names = "default";
+		pinctrl-0 = <&explorer_int0 &explorer_int1 &explorer_int2 &pmic_pon_1 &pmic_resin_n>;
+		clock-names = "clk_ref";
+		clocks = <&rpmhcc RPMH_RF_CLK5>;
+		vcc_sdio-supply = <&L6C>;
+		explorer,clk-drive-strength = <4>;
+		explorer,cmd-drive-strength = <4>;
+		explorer,data-drive-strength = <4>;
+	};
+        /*#ifdef OPLUS_FEATURE_TP_BASIC*/
+	gpio_keys {
+		compatible = "gpio-keys";
+		label = "gpio-keys";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&key_vol_down_default>;
+
+		vol_up {
+			status="disabled";
+		};
+
+		vol_down {
+			label = "volume_down";
+			gpios = <&pm7325_gpios 6 GPIO_ACTIVE_LOW>;
+			linux,input-type = <1>;
+			linux,code = <KEY_VOLUMEDOWN>;
+			gpio-key,wakeup;
+			debounce-interval = <15>;
+			linux,can-disable;
+		};
+	};
+        /*#endif OPLUS_FEATURE_TP_BASIC*/
+};
+
+/*#ifdef OPLUS_FEATURE_TP_BASIC*/
+&qupv3_se0_i2c {
+	status = "okay";
+
+	st_fts@49 {
+		status = "disabled";
+	};
+	focaltech@38 {
+		status = "okay";
+		compatible = "focaltech,ft3658u";
+		reg = <0x38>;
+		chip-name = "FT3658U";
+
+		/* Power Config */
+		enable1v8_gpio = <&tlmm 18 0x1>;
+		vdd_2v8-supply = <&L3C>;
+		vdd_2v8_volt = <3008000>;
+
+		/* Interrupt && Irq-gpio */
+		/* Other HW Resource */
+		irq-gpio = <&tlmm 51 0x2002>;
+		reset-gpio = <&tlmm 11 0x1>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&ts_int_active &ts_reset_active>;
+
+		touchpanel,max-num-support = <10>;
+		touchpanel,tx-rx-num = <16 35>;
+		touchpanel,panel-coords = <8640 19200>;
+		touchpanel,display-coords = <1080 2400>;
+		touchpanel,touchmajor-limit = <0 54>;
+		touchpanel,smooth-level = <255 2 10 15 45 60>;
+		touchpanel,sensitive-level = <255 15 12 9 6 2>;
+
+		vid_len = <2>;
+		project_id = <21658>;
+		tp_type = <8>;
+		panel_type = <8>;
+		firmware_name = "focalt_";
+		platform_support_project = <21658>;
+		platform_support_project_dir = <21658>;
+		platform_support_project_commandline = "default_commandline";
+		/* SW Support Feature Control */
+
+		irq_need_dev_resume_ok;
+		black_gesture_support;
+		fw_edge_limit_support;
+		pressure_report_support;
+		charger_pump_support;
+		game_switch_support;
+		smart_gesture_support;
+		headset_pump_support;
+		fw_update_app_support;
+		fingerprint_underscreen_support;
+		//esd_handle_support;
+		new_set_irq_wake_support;
+		// focalt x8 resolution config
+		high_resolution_support;
+		high_resolution_support_x8;
+		touchpanel,button-type = <4>;
+		touchpanel.button-TRx = <0 0>;
+	};
+};
+/*#endif OPLUS_FEATURE_TP_BASIC*/
+
+
+//#ifdef OPLUS_FEATURE_RF_CABLE_DETECT
+&tlmm {
+  rf_cable0_active: rf_cable0_active {
+    mux {
+      pins = "gpio63";
+      function = "gpio";
+    };
+    config {
+      pins = "gpio63";
+      drive-strength = <2>;
+      input-enable;
+      bias-pull-up;
+    };
+  };
+};
+
+&soc {
+  oplus_rf_cable {
+    compatible = "oplus,rf_cable";
+    interrupt-parent = <&tlmm>;
+    rf_cable_support_num = <1>;
+    rf,cable0-gpio = <&tlmm 63 0>;
+    rf,cable-support-timer = <0>;
+    pinctrl-names = "rf_cable_active";
+    pinctrl-0 = <&rf_cable0_active>;
+  };
+};
+ //#endif /* OPLUS_FEATURE_RF_CABLE_DETECT */

@@ -1,0 +1,9 @@
+/dts-v1/;
+
+#include "../qcom/diwalip.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. DiwaliP SoC";
+	compatible = "qcom,diwalip";
+	qcom,board-id = <0 0>;
+};
